@@ -93,7 +93,7 @@ random_sleep()
 
 
 class PhosphorusData:
-    def __init__(self, name="", ticker="", starRating=0, price=0.0, fairValueEstimate=0.0, uncertainty="", considerBuy=0.0, considerSell=0.0, economicMoat="", stewardshipRating=""):
+    def __init__(self, name="", ticker="", starRating=0, price=0.0, fairValueEstimate=0.0, uncertainty="", considerBuy=0.0, considerSell=0.0, economicMoat="", stewardshipRating="", industry="", sector="",marketCap=0.0):
         self.name = name
         self.ticker = ticker
         self.starRating = starRating
@@ -104,7 +104,9 @@ class PhosphorusData:
         self.considerSell = considerSell
         self.economicMoat = economicMoat
         self.stewardshipRating = stewardshipRating
-
+        self.sector = sector
+        self.industry = industry
+        self.marketCap = marketCap
 
 jsonData = []
 
@@ -156,7 +158,12 @@ while keepLooping:
                             msd.starRating = 1
                         else:
                             msd.starRating = 0
-
+                if index == 8:
+                    msd.sector = cell.text
+                if index == 10:
+                    msd.industry = cell.text
+                if index == 12:
+                    msd.marketCap = float(cell.text.replace(',', ''))
             except:
                 # if msd.name and msd.name != "" and msd.name != "Stock Name" and msd.name != "S&P 500":
                 #     keepLooping = False;
@@ -193,12 +200,12 @@ while keepLooping:
             try:
                 price = browser.find_element_by_xpath(
                     "//*[@id='analyst_tab']/table/tbody/tr[2]/td[1]")
-                msd.price = float(price.text.split(" ")[0])
+                msd.price = float(price.text.split(" ")[0].replace(',', ''))
 
                 fairValueEstimate = browser.find_element_by_xpath(
                     "//*[@id='analyst_tab']/table/tbody/tr[2]/td[2]")
                 msd.fairValueEstimate = float(
-                    fairValueEstimate.text.split(" ")[0])
+                    fairValueEstimate.text.split(" ")[0].replace(',', ''))
 
                 uncertainty = browser.find_element_by_xpath(
                     "//*[@id='analyst_tab']/table/tbody/tr[2]/td[3]")
@@ -206,11 +213,11 @@ while keepLooping:
 
                 considerBuy = browser.find_element_by_xpath(
                     "//*[@id='analyst_tab']/table/tbody/tr[5]/td[1]")
-                msd.considerBuy = float(considerBuy.text.split(" ")[0])
+                msd.considerBuy = float(considerBuy.text.split(" ")[0].replace(',', ''))
 
                 considerSell = browser.find_element_by_xpath(
                     "//*[@id='analyst_tab']/table/tbody/tr[5]/td[2]")
-                msd.considerSell = float(considerSell.text.split(" ")[0])
+                msd.considerSell = float(considerSell.text.split(" ")[0].replace(',', ''))
 
                 economicMoat = browser.find_element_by_xpath(
                     "//*[@id='analyst_tab']/table/tbody/tr[5]/td[3]")
@@ -258,7 +265,9 @@ while keepLooping:
             jsonObject["considerSell"] = msd.considerSell
             jsonObject["economicMoat"] = msd.economicMoat
             jsonObject["stewardshipRating"] = msd.stewardshipRating
-
+            jsonObject["sector"] = msd.sector
+            jsonObject["industry"] = msd.industry
+            jsonObject["marketCap"] = msd.marketCap
             print(jsonObject)
 
             jsonData.append(jsonObject)
