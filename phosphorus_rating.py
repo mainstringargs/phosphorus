@@ -21,8 +21,8 @@ except NameError:
 
 
 def random_sleep():
-    sleepLength = (random.randint(0, 3))
-    print "Sleep for ", sleepLength, "seconds"
+    sleepLength = (random.randint(2, 10))
+    print ("Sleep for ", sleepLength, "seconds")
     time.sleep(sleepLength)
 
 
@@ -31,7 +31,7 @@ option.add_argument("--incognito")
 
 
 browser = webdriver.Chrome(
-    executable_path='/usr/local/bin/chromedriver', chrome_options=option)
+    executable_path='chromedriver', chrome_options=option)
 
 
 browser.get(phosphorus_config.startUrl)
@@ -232,7 +232,7 @@ while keepLooping:
         try:
             browser.find_element_by_link_text("Next 25").click()
         except:
-            print "Breaking loop, ended processing"
+            print ("Breaking loop, ended processing")
             keepLooping = False
 
     if keepLooping:
